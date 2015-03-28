@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<widget id="com.phoenixcontact.com.quick.room.finder" version="0.0.1" xmlns="http://www.w3.org/ns/widgets"
+        xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Quick Room Finder</name>
+    <description>
+        An app for finding your way about the campus
+    </description>
+    <author email="webdev@pxc" href="http://pxc.com/">
+        PxC Web Development Team
+    </author>
+    <content src="index.html"/>
+    <access origin="*"/>
+    <preference name="webviewbounce" value="false"/>
+    <preference name="UIWebViewBounce" value="false"/>
+    <preference name="DisallowOverscroll" value="true"/>
+    <preference name="BackupWebStorage" value="none"/>
+    <preference name="Orientation" value="portrait"/>
+    <preference name="Orientation" value="landscape left"/>
+    <preference name="Orientation" value="landscape right"/>
+    <feature name="StatusBar">
+        <param name="ios-package" value="CDVStatusBar" onload="true"/>
+    </feature>
+</widget>

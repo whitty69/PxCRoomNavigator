@@ -1,0 +1,24 @@
+<ion-view view-title="Quick Room Finder">
+
+    <div id="map_canvas" ng-class="ng-scope">
+        <ui-gmap-google-map id="map"
+                            center="map.center"
+                            pan="map.pan"
+                            zoom="map.zoom"
+                            draggable="true"
+                            refresh="map.refresh"
+                            options="map.options"
+                            events="map.events"
+                            bounds="map.bounds">
+
+
+            <ui-gmap-drag-zoom keyboardkey="'alt'"></ui-gmap-drag-zoom>
+
+            <ui-gmap-marker idKey="selectedBuilding.id" coords="selectedBuilding"></ui-gmap-marker>
+
+        </ui-gmap-google-map>
+    </div>
+    <ion-footer-bar class="bar-dark">
+        <a ng-click="centerOnMe()" class="button button-icon icon ion-navigate">Find Me</a>
+    </ion-footer-bar>
+</ion-view>

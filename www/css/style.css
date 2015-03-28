@@ -1,0 +1,27 @@
+/* Empty. Add your own CSS if you like */
+html, body, #map_canvas {
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+}
+
+#map_canvas {
+    position: relative;
+}
+
+.angular-google-map-container {
+    position: absolute;
+    top: 60px;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+.search-bar {
+    position: relative;
+    width: 100%;
+    top: 60px;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
