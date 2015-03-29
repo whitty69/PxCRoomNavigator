@@ -1,0 +1,10 @@
+<ion-view view-title="Quick Room Finder - Buildings">
+    <ion-content>
+        <ion-item collection-repeat="building in buildings">
+            <a class="item item-icon-left" href="#/app/mapselect/{{building.id}}">
+                <i class="icon {{building.icon}}"></i>
+                {{building.name}}
+            </a>
+        </ion-item>
+    </ion-content>
+</ion-view>
