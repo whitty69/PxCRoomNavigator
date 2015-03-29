@@ -17,6 +17,7 @@ html, body, #map_canvas {
     left: 0;
 }
 
+.search-list,
 .search-bar {
     position: relative;
     width: 100%;

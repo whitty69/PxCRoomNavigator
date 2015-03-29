@@ -53,12 +53,29 @@ angular.module('starter', [
                     }
                 }
             })
+            .state('app.mapselect', {
+                url: '/mapselect/:buildingId',
+                views: {
+                    'menuContent': {
+                        templateUrl: 'templates/map.html',
+                        controller: 'MapSelectController'
+                    }
+                }
+            })
             .state('app.search', {
                 url: '/search',
                 views: {
                     'menuContent': {
                         templateUrl: 'templates/search.html',
                         controller: 'SearchController'
+                    }
+                }
+            }).state('app.buildings', {
+                url: '/buildings',
+                views: {
+                    'menuContent': {
+                        templateUrl: 'templates/buildings.html',
+                        controller: 'BuildingsController'
                     }
                 }
             });

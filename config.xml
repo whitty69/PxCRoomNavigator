@@ -14,9 +14,6 @@
     <preference name="UIWebViewBounce" value="false"/>
     <preference name="DisallowOverscroll" value="true"/>
     <preference name="BackupWebStorage" value="none"/>
-    <preference name="Orientation" value="portrait"/>
-    <preference name="Orientation" value="landscape left"/>
-    <preference name="Orientation" value="landscape right"/>
     <feature name="StatusBar">
         <param name="ios-package" value="CDVStatusBar" onload="true"/>
     </feature>
