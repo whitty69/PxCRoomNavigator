@@ -12,7 +12,7 @@ html, body, #map_canvas {
 .angular-google-map-container {
     position: absolute;
     top: 60px;
-    bottom: 0;
+    bottom: 60px;
     right: 0;
     left: 0;
 }

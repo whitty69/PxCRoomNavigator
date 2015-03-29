@@ -1,5 +1,4 @@
 <ion-view view-title="Quick Room Finder">
-
     <div id="map_canvas" ng-class="ng-scope">
         <ui-gmap-google-map id="map"
                             center="map.center"
@@ -11,11 +10,13 @@
                             events="map.events"
                             bounds="map.bounds">
 
-            <ui-gmap-marker idKey="selectedBuilding.id" coords="selectedBuilding"></ui-gmap-marker>
+            <ui-gmap-markers models="markers" coords="'coords'" icon="'img'" labelContent="'name'"></ui-gmap-markers>
+
+            <!--<ui-gmap-marker idKey="currentLocation.id" coords="currentLocation" image="'img'"></ui-gmap-marker>-->
 
         </ui-gmap-google-map>
     </div>
     <ion-footer-bar class="bar-dark">
-        <a ng-click="centerOnMe()" class="button button-icon icon ion-navigate">Find Me</a>
+        <span class="button button-icon icon ion-navigate">My Location {{currentLocation}}</span>
     </ion-footer-bar>
 </ion-view>
