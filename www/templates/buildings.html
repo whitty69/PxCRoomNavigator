@@ -3,7 +3,10 @@
         <ion-item collection-repeat="building in buildings">
             <a class="item item-icon-left" href="#/app/mapselect/{{building.id}}">
                 <i class="icon {{building.icon}}"></i>
-                {{building.name}}
+
+                <h2>{{building.name}}</h2>
+
+                <p>{{building.description}}</p>
             </a>
         </ion-item>
     </ion-content>

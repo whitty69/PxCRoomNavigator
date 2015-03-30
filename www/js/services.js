@@ -4,28 +4,59 @@ angular.module('starter.services', [])
         // Might use a resource here that returns a JSON array
         // Some fake testing data
         var campusCenter = {
+            control: {},
             center: {
                 latitude: 51.933092,
                 longitude: 9.107958
             },
-            zoom: 10,
+            zoom: 16,
             options: {
-                mapTypeId: google.maps.MapTypeId.SATELLITE
+                mapTypeId: google.maps.MapTypeId.SATELLITE,
+                streetViewControl: false,
+                panControl: false,
+                maxZoom: 25,
+                minZoom: 3
             }
         };
 
         var buildings = [{
             id: 21,
             name: 'G21',
+            description: 'Building 21 is the main entrance Building and is often referred to as the "Hochaus"',
             img: 'img/factory.png',
             icon: 'ion-home',
             coords: {
                 latitude: 51.934863,
                 longitude: 9.104763
-            }
+            },
+            meetingRooms: [{
+                id: 101,
+                name: 'G21 Room 101',
+                description: 'A meeting room for up to 15 people. The room has a projector and audio capabilities',
+                img: 'img/regroup.png',
+                icon: 'ion-ios-people',
+                floor: '1st',
+                coords: {
+                    latitude: 51.93478,
+                    longitude: 9.10470
+                }
+            },
+                {
+                    id: 102,
+                    name: 'G21 Room 102',
+                    description: 'A meeting room for up to 8 people. The room has a projector and audio capabilities',
+                    img: 'img/regroup.png',
+                    icon: 'ion-ios-people',
+                    floor: '1st',
+                    coords: {
+                        latitude: 51.934843,
+                        longitude: 9.104663
+                    }
+                }]
         }, {
             id: 2,
             name: 'Company Restaurant',
+            description: 'The cantine is currently run by <a href="http://www.aramark.com" target="_blank"> aramark </a> and serves hot and cold food for breakfast (08.30 - 10.00) and lunch (11.30 - 13.30)',
             img: 'img/restaurant.png',
             icon: 'ion-coffee',
             coords: {
@@ -35,12 +66,49 @@ angular.module('starter.services', [])
         }, {
             id: 17,
             name: 'G17',
+            description: 'Building 17 is the main Building for IT',
             img: 'img/factory.png',
             icon: 'ion-home',
             coords: {
                 latitude: 51.934364,
                 longitude: 9.108534
-            }
+            },
+            meetingRooms: [{
+                id: 101,
+                name: 'G17 Room 101',
+                description: 'A meeting room for up to 8 people. The room has a projector and audio capabilities',
+                img: 'img/regroup.png',
+                icon: 'ion-ios-people',
+                floor: '1st',
+                coords: {
+                    latitude: 51.934374,
+                    longitude: 9.10870
+                }
+            }, {
+                id: 102,
+                name: 'G17 Room 102',
+                description: 'A meeting room for up to 8 people. The room has a projector and audio capabilities',
+                img: 'img/regroup.png',
+                icon: 'ion-ios-people',
+                floor: '1st',
+                coords: {
+                    latitude: 51.934284,
+                    longitude: 9.10830
+                }
+            },
+                {
+                    id: 103,
+                    name: 'G17 Room 103',
+                    description: 'A meeting room for up to 8 people. The room has a projector and audio capabilities',
+                    img: 'img/regroup.png',
+                    icon: 'ion-ios-people',
+                    floor: '1st',
+                    coords: {
+                        latitude: 51.93464,
+                        longitude: 9.108780
+                    }
+                }]
+
         }];
 
         var myLocation = {

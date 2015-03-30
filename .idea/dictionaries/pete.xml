@@ -3,6 +3,7 @@
     <words>
       <w>coords</w>
       <w>mapselect</w>
+      <w>tilesloaded</w>
     </words>
   </dictionary>
 </component>

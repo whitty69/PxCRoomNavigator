@@ -10,13 +10,25 @@
                             events="map.events"
                             bounds="map.bounds">
 
-            <ui-gmap-markers models="markers" coords="'coords'" icon="'img'" labelContent="'name'"></ui-gmap-markers>
+            <ui-gmap-markers models="markers" coords="'coords'" icon="'img'" labelContent="'name'"
+                             click="onMarkerClicked">
+                <ui-gmap-windows show="'showWindow'" closeClick="'closeClick'" ng-cloak>
+                    <div>
+                        <p ng-non-bindable>{{ name }}!</p>
 
-            <!--<ui-gmap-marker idKey="currentLocation.id" coords="currentLocation" image="'img'"></ui-gmap-marker>-->
+                        <p ng-non-bindable>{{ description }}!</p>
+                        <!--<div ng-controller='InfoController'>-->
+                        <!--<a class="btn" ng-click="clickedButtonInWindow()">CLICK ME</a>-->
+                        <!--</div>-->
+                        <!--<p class="muted">My marker will stay open when the window is popped up!</p>-->
+                    </div>
+                </ui-gmap-windows>
+
+            </ui-gmap-markers>
 
         </ui-gmap-google-map>
     </div>
     <ion-footer-bar class="bar-dark">
-        <span class="button button-icon icon ion-navigate">My Location {{currentLocation}}</span>
+        <span class="icon ion-navigate">My Location {{currentLocation}}</span>
     </ion-footer-bar>
 </ion-view>
