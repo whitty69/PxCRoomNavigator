@@ -10,9 +10,10 @@
                             events="map.events"
                             bounds="map.bounds">
 
-            <ui-gmap-markers models="markers" coords="'coords'" icon="'img'" labelContent="'description'"
+            <ui-gmap-markers models="markers" coords="'coords'" icon="'img'" title="'description'" labelAnchor="22 0"
+                             labelClass="marker-labels"
                              click="onMarkerClicked" options="'options'">
-                <ui-gmap-windows show="'showWindow'" closeClick="'closeClick'" ng-cloak>
+                <ui-gmap-windows show="'showWindow'" closeClick="'closeClick'">
                     <div>
                         <p ng-non-bindable>{{ name }}!</p>
 
@@ -26,6 +27,7 @@
         </ui-gmap-google-map>
     </div>
     <ion-footer-bar class="bar-dark">
-        <P><span class="button button-bar icon ion-navigate">My Location {{currentLocation.coords}}</span></P>
+        <P><span class="button-bar-inline icon ion-navigate">  My Location {{ currentLocation.coords.latitude | number:4 }}, {{ currentLocation.coords.longitude | number:4 }}</span>
+        </P>
     </ion-footer-bar>
 </ion-view>

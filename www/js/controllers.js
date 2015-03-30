@@ -214,10 +214,16 @@ function prepMarkers($scope, selectedBuilding, myLocation, selectedId, $timeout)
         });
     }
     if (myLocation) {
+        myLocation.name = 'Me';
+        myLocation.description = 'I am currently here.';
         markers.push(myLocation)
     }
     $scope.onMarkerClicked = function (model) {
-        $scope.selectedMarker = model;
+        var marker = model.model;
+        $scope.selectedMarker = marker;
+        model.showWindow = null;
+        $scope.$apply();
+
     };
     // set the onClicked listener
     markers.forEach(function (marker) {
@@ -225,9 +231,17 @@ function prepMarkers($scope, selectedBuilding, myLocation, selectedId, $timeout)
             $scope.onMarkerClicked(marker);
         };
 
+        marker.closeClick = function () {
+            marker.showWindow = null;
+        };
+
+        marker.options = {animation: google.maps.Animation.NONE};
+        if (marker.showWindow) {
+            marker.showWindow = false;
+        }
         if (marker.id === selectedId) {
-            console.log(marker.name);
             $timeout(function () {
+                marker.showWindow = true;
                 marker.options = {
                     animation: google.maps.Animation.BOUNCE
                 };
