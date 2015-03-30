@@ -1,13 +1,16 @@
 <ion-view view-title="Quick Room Finder - Buildings">
     <ion-content>
-        <ion-item collection-repeat="building in buildings">
-            <a class="item item-icon-left" href="#/app/mapselect/{{building.id}}">
-                <i class="icon {{building.icon}}"></i>
+        <div class="list card" ng-repeat="building in buildings">
+            <div class="item item-text-wrap">
+                <a class="item item-icon-left" href="#/app/mapselect/{{building.id}}">
+                    <i class="icon {{building.icon}}"></i>
 
-                <h2>{{building.name}}</h2>
+                    <h2><strong>{{building.name}}</strong></h2>
 
-                <p>{{building.description}}</p>
-            </a>
-        </ion-item>
+                    <div ng-bind-html="building.description"></div>
+
+                </a>
+            </div>
+        </div>
     </ion-content>
 </ion-view>

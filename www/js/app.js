@@ -9,7 +9,8 @@ angular.module('starter', [
     'ionic',
     'starter.controllers',
     'starter.services',
-    'uiGmapgoogle-maps'])
+    'uiGmapgoogle-maps',
+])
 
     .run(function ($ionicPlatform) {
         $ionicPlatform.ready(function () {
@@ -87,14 +88,8 @@ angular.module('starter', [
         uiGmapGoogleMapApiProvider.configure({
             key: 'AIzaSyCPJNT0sUAJo2vcYrjzexh9S7PzrqwSbFA',
             v: '3.17',
-            libraries: 'weather,geometry,visualization'
+            libraries: 'weather,geometry,visualization,animation'
         });
 
     });
 
-
-function resizeResizeableHeight() {
-    $('.resizableHeight').each(function () {
-        $(this).outerHeight($(this).parent().height() - ( $(this).offset().top - ( $(this).parent().offset().top + parseInt($(this).parent().css('padding-top')) ) ))
-    });
-}

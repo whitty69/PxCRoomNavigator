@@ -18,11 +18,22 @@ html, body, #map_canvas {
 }
 
 .search-list,
-.search-bar {
-    position: relative;
+#search-bar {
+    background: none;
+    position: absolute;
     width: 100%;
-    top: 60px;
-    bottom: 0;
-    right: 0;
-    left: 0;
+    top: 44px;
+    height: 40px;
+    z-index: 3;
+}
+
+#search-bar .item {
+    background: none;
+    border: none;
+}
+
+#content {
+    top: 44px;
+    padding-top: 45px;
+    padding-bottom: 20px;
 }

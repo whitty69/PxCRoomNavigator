@@ -30,7 +30,7 @@ angular.module('starter.services', [])
                 longitude: 9.104763
             },
             meetingRooms: [{
-                id: 101,
+                id: 21101,
                 name: 'G21 Room 101',
                 description: 'A meeting room for up to 15 people. The room has a projector and audio capabilities',
                 img: 'img/regroup.png',
@@ -42,7 +42,7 @@ angular.module('starter.services', [])
                 }
             },
                 {
-                    id: 102,
+                    id: 21102,
                     name: 'G21 Room 102',
                     description: 'A meeting room for up to 8 people. The room has a projector and audio capabilities',
                     img: 'img/regroup.png',
@@ -56,7 +56,7 @@ angular.module('starter.services', [])
         }, {
             id: 2,
             name: 'Company Restaurant',
-            description: 'The cantine is currently run by <a href="http://www.aramark.com" target="_blank"> aramark </a> and serves hot and cold food for breakfast (08.30 - 10.00) and lunch (11.30 - 13.30)',
+            description: 'The cantine is currently run by <a href="http://www.aramark.com" >aramark</a> and serves hot and cold food for breakfast (08.30 - 10.00) and lunch (11.30 - 13.30)',
             img: 'img/restaurant.png',
             icon: 'ion-coffee',
             coords: {
@@ -66,7 +66,7 @@ angular.module('starter.services', [])
         }, {
             id: 17,
             name: 'G17',
-            description: 'Building 17 is the main Building for IT',
+            description: 'Building 17 is the main Building for IT, CSNM and CEO, Mr. Stührenberg',
             img: 'img/factory.png',
             icon: 'ion-home',
             coords: {
@@ -74,19 +74,8 @@ angular.module('starter.services', [])
                 longitude: 9.108534
             },
             meetingRooms: [{
-                id: 101,
+                id: 17101,
                 name: 'G17 Room 101',
-                description: 'A meeting room for up to 8 people. The room has a projector and audio capabilities',
-                img: 'img/regroup.png',
-                icon: 'ion-ios-people',
-                floor: '1st',
-                coords: {
-                    latitude: 51.934374,
-                    longitude: 9.10870
-                }
-            }, {
-                id: 102,
-                name: 'G17 Room 102',
                 description: 'A meeting room for up to 8 people. The room has a projector and audio capabilities',
                 img: 'img/regroup.png',
                 icon: 'ion-ios-people',
@@ -97,7 +86,19 @@ angular.module('starter.services', [])
                 }
             },
                 {
-                    id: 103,
+                    id: 17102,
+                name: 'G17 Room 102',
+                description: 'A meeting room for up to 8 people. The room has a projector and audio capabilities',
+                img: 'img/regroup.png',
+                icon: 'ion-ios-people',
+                floor: '1st',
+                    coords: {
+                        latitude: 51.934374,
+                        longitude: 9.10870
+                    }
+            },
+                {
+                    id: 17103,
                     name: 'G17 Room 103',
                     description: 'A meeting room for up to 8 people. The room has a projector and audio capabilities',
                     img: 'img/regroup.png',
@@ -127,13 +128,26 @@ angular.module('starter.services', [])
                 return buildings;
             },
             get: function (buildingId) {
-                for (var i = 0; i < buildings.length; i++) {
-                    if (buildings[i].id === parseInt(buildingId)) {
-                        selectedBuilding = buildings[i];
-                        return buildings[i];
+                var res = null;
+                buildings.forEach(function (building) {
+                    if (building.id === buildingId) {
+                        selectedBuilding = building;
+                        res = building;
+
+                    } else {
+                        // it may be a meeting room
+                        if (building.meetingRooms) {
+                            building.meetingRooms.forEach(function (room) {
+                                if (room.id === parseInt(buildingId)) {
+                                    selectedBuilding = building;
+                                    res = building;
+
+                                }
+                            });
+                        }
                     }
-                }
-                return null;
+                });
+                return res;
             },
             getCampusCenter: function () {
                 return campusCenter
