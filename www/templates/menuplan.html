@@ -1,0 +1,17 @@
+<ion-view view-title="Quick Room Finder - Menuplan">
+    <ion-content>
+        <h1>Menu for {{date | date:'dd-MM-yyyy'}}</h1>
+
+        <div class="list card" ng-repeat="menu in menus">
+            <div class="item item-text-wrap item-thumbnail-left">
+                <img ng-src="{{menu.icon}}">
+
+                <h2><strong>{{menu.name}}</strong></h2>
+
+                <p>{{menu.price}}</p>
+
+                <div ng-bind-html="menu.description"></div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

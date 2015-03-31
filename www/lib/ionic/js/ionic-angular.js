@@ -4158,7 +4158,7 @@
  *         url: "/tab",
  *         abstract: true,
  *         prefetchTemplate: false,
- *         templateUrl: "tabs-templates/tabs.html"
+ *         templateUrl: "tabs-templates/about.html"
  *       })
  *       .state('tabs.home', {
  *         url: "/home",

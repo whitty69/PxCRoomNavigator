@@ -124,12 +124,22 @@ angular.module('starter.controllers', [])
         $scope.buildings = Buildings.all();
     })
 
-    .controller('InfoController', function ($scope, $log) {
-        $scope.templateValue = 'hello from the template itself';
-        $scope.clickedButtonInWindow = function () {
-            var msg = 'clicked a window in the template!';
-            console.log(msg);
-        }
+    .controller('MenuplanController', function ($scope, $log) {
+        $scope.date = new Date();
+        $scope.menus = [
+            {
+                name: 'Currywurst & Pommes',
+                description: 'Lovely Bratwurst covered in Curry ketchup served with a portion of chips!',
+                icon: 'img/menus/currywurst.jpg',
+                price: '€3.50'
+            },
+            {
+                name: 'Salad Buffet',
+                description: 'A wide range of fresh salad to choose from.',
+                icon: 'img/menus/salad.jpg',
+                price: '€0.50/100g'
+            }
+        ];
     });
 function setMyLocation($scope, Buildings, $cordovaGeolocation, $timeout) {
     var options = {

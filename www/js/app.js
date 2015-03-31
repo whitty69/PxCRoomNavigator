@@ -23,6 +23,8 @@ angular.module('starter', [
                 // org.apache.cordova.statusbar required
                 StatusBar.styleDefault();
             }
+
+
         });
     })
 
@@ -71,7 +73,8 @@ angular.module('starter', [
                         controller: 'SearchController'
                     }
                 }
-            }).state('app.buildings', {
+            })
+            .state('app.buildings', {
                 url: '/buildings',
                 views: {
                     'menuContent': {
@@ -79,7 +82,27 @@ angular.module('starter', [
                         controller: 'BuildingsController'
                     }
                 }
-            });
+            })
+            .state('app.menuplan', {
+                url: '/menuplan',
+                views: {
+                    'menuContent': {
+                        templateUrl: 'templates/menuplan.html',
+                        controller: 'MenuplanController'
+                    }
+                }
+            })
+            .state('app.about', {
+                url: '/about',
+                views: {
+                    'menuContent': {
+                        templateUrl: 'templates/about.html',
+                        controller: 'AppController'
+                    }
+                }
+            })
+
+        ;
 
 
         // if none of the above states are matched, use this as the fallback

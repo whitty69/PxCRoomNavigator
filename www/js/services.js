@@ -56,7 +56,7 @@ angular.module('starter.services', [])
         }, {
             id: 2,
             name: 'Company Restaurant',
-            description: 'The cantine is currently run by <a href="http://www.aramark.com" >aramark</a> and serves hot and cold food for breakfast (08.30 - 10.00) and lunch (11.30 - 13.30)',
+            description: 'The cantine is currently run by <a href="#app/menuplan">aramark</a> and serves hot and cold food for breakfast (08.30 - 10.00) and lunch (11.30 - 13.30)',
             img: 'img/restaurant.png',
             icon: 'ion-coffee',
             coords: {
