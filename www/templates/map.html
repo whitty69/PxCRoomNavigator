@@ -15,7 +15,21 @@
                              click="onMarkerClicked" options="'options'">
                 <ui-gmap-windows show="'showWindow'" closeClick="'closeClick'">
                     <div>
-                        <h2><p ng-non-bindable>{{ name }}!</p></h2>
+                        <h3><p ng-non-bindable>{{ name }}!</p></h3>
+
+                        <p ng-non-bindable>{{ description }}!</p>
+
+                    </div>
+                </ui-gmap-windows>
+
+            </ui-gmap-markers>
+
+            <ui-gmap-markers models="meMarkers" coords="'coords'" icon="'img'" title="'description'" labelAnchor="22 0"
+                             labelClass="marker-labels"
+                             click="onMarkerClicked" options="'options'">
+                <ui-gmap-windows show="'showWindow'" closeClick="'closeClick'">
+                    <div>
+                        <h3><p ng-non-bindable>{{ name }}!</p></h3>
 
                         <p ng-non-bindable>{{ description }}!</p>
 
@@ -27,7 +41,7 @@
         </ui-gmap-google-map>
     </div>
     <ion-footer-bar class="bar-dark">
-        <P><span class="button-bar-inline icon ion-navigate">  My Location {{ currentLocation.coords.latitude | number:4 }}, {{ currentLocation.coords.longitude | number:4 }}</span>
+        <P><span class="button-bar-inline icon ion-navigate"> distance to building {{ currentLocation.distance | number:3 }}km</span>
         </P>
     </ion-footer-bar>
 </ion-view>

@@ -2,14 +2,21 @@
     <ion-content>
         <div class="list card" ng-repeat="building in buildings">
             <div class="item item-text-wrap">
-                <a class="item item-icon-left" href="#/app/mapselect/{{building.id}}">
-                    <i class="icon {{building.icon}}"></i>
 
+                <a class="item item-icon-left" href="#/app/mapselect/{{building.id}}&-1">
+                    <i class="icon {{building.icon}}"></i>
                     <h2><strong>{{building.name}}</strong></h2>
 
                     <div ng-bind-html="building.description"></div>
-
                 </a>
+
+                <div class="item item-text-wrap" ng-repeat="floor in building.floors">
+                    <div class="item item-divider">
+                        <a class="item-divider" href="#/app/mapselect/{{building.id}}&{{floor.id}}">
+                            <div ng-bind-html="floor.name"></div>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </ion-content>

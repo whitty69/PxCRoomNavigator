@@ -11,25 +11,25 @@ angular.module('starter.controllers', [])
         }, 10000);
         uiGmapGoogleMapApi.then(function (maps) {
             prepareMapEvents($scope, Buildings, $cordovaGeolocation, $timeout);
-            $scope.markers = prepMarkers($scope, Buildings.getSelectedBuilding(), Buildings.getMyLocation());
+            $scope.meMarkers = [Buildings.getMyLocation()];
+            $scope.markers = prepMarkers($scope, Buildings.getSelectedBuilding(), -1, $timeout, -1);
         });
 
 
     })
     .controller('MapSelectController', function ($scope, uiGmapGoogleMapApi, Buildings, $stateParams, $ionicLoading, $cordovaGeolocation, $timeout) {
-        $scope.loading = $ionicLoading.show({
-            content: 'Getting current location...',
-            showBackdrop: true
-        });
+        //console.log($stateParams.floorId);
+        //console.log($stateParams.buildingId);
+
         prepareMapEvents($scope, Buildings, $cordovaGeolocation);
         uiGmapGoogleMapApi.then(function (maps) {
             try {
                 var buildingId = parseInt($stateParams.buildingId);
+                var floorId = parseInt($stateParams.floorId);
                 var building = Buildings.get(buildingId);
                 if (building) {
-                    $scope.markers = prepMarkers($scope, building, Buildings.getMyLocation(), buildingId, $timeout);
+                    $scope.markers = prepMarkers($scope, building, buildingId, $timeout, floorId);
                 }
-                $scope.myLocation = Buildings.getMyLocation();
             } finally {
                 $ionicLoading.hide();
             }
@@ -59,7 +59,7 @@ angular.module('starter.controllers', [])
                         //$scope.map.center = myLoc.coords;
                         $scope.myLocation = myLoc;
                         Buildings.setMyLocation(myLoc);
-                        $scope.markers = prepMarkers($scope, Buildings.getSelectedBuilding(), Buildings.getMyLocation(), -1, $timeout);
+                        $scope.markers = prepMarkers($scope, Buildings.getSelectedBuilding(), -1, $timeout, -1);
                         //maps.refresh();
                     } finally {
                         $ionicLoading.hide();
@@ -81,36 +81,8 @@ angular.module('starter.controllers', [])
     .controller('SearchController', function ($scope, Buildings) {
         var doSearch = ionic.debounce(function (query) {
             var results = [];
-            var buildings = Buildings.all();
-            if (query) {
-                buildings.forEach(function (building) {
 
-                    var re = new RegExp(query, 'gi');
-                    if (building.name.search(re) > -1 || building.description.search(re) > -1) {
-                        console.log(building.name);
-                        results.push(building);
-                    }
-                    if (building.meetingRooms) {
-                        building.meetingRooms.forEach(function (room) {
-                            if (room.name.search(re) > -1 || room.description.search(re) > -1) {
-                                console.log(room.name);
-                                results.push(room);
-                            }
-                        });
-                    }
-                });
-            } else {
-                results = buildings;
-                buildings.forEach(function (building) {
-
-                    if (building.meetingRooms) {
-                        building.meetingRooms.forEach(function (room) {
-                            results.push(room);
-                        });
-                    }
-                });
-            }
-            $scope.searchResults = results;
+            $scope.searchResults = Buildings.search(query);
             $scope.$apply();
         }, 500);
 
@@ -149,21 +121,14 @@ function setMyLocation($scope, Buildings, $cordovaGeolocation, $timeout) {
     };
 
     $cordovaGeolocation.getCurrentPosition(options).then(function (position) {
-        //latlong =  { 'lat' : pos.coords.latitude, 'long' : pos.coords.longitude }
-
-        var myLoc = {
-            id: 'myLocation@9988',
-            img: 'img/walking.png',
-            coords: {
+        var myLoc = Buildings.getMyLocation();
+        myLoc.coords = {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude
-            }
         };
         Buildings.setMyLocation(myLoc);
-        var selectedBuilding = Buildings.getSelectedBuilding();
-        if (selectedBuilding) {
-            $scope.markers = prepMarkers($scope, selectedBuilding, myLoc, -1, $timeout);
-        }
+        myLoc.distance = Buildings.getDistanceToBuilding();
+        $scope.meMarkers = [myLoc];
         $scope.currentLocation = myLoc;
     }, function (err) {
         console.error(err);
@@ -191,7 +156,7 @@ function prepareMapEvents($scope, Buildings, $cordovaGeolocation, $timeout) {
             ,
             click: function (mapModel, eventName, originalEventArgs) {
                 // 'this' is the directive's scope
-                console.log("user defined event: " + eventName, mapModel, originalEventArgs);
+                // console.log("user defined event: " + eventName, mapModel, originalEventArgs);
 
                 var e = originalEventArgs[0];
                 $scope.map.clickedMarker = {
@@ -210,24 +175,30 @@ function prepareMapEvents($scope, Buildings, $cordovaGeolocation, $timeout) {
 }
 
 
-function prepMarkers($scope, selectedBuilding, myLocation, selectedId, $timeout) {
+function prepMarkers($scope, selectedBuilding, selectedId, $timeout, floorId) {
 
+    //console.log("prepare markers - in")
     var markers = [];
 
     if (selectedBuilding) {
         markers.push(selectedBuilding)
     }
     // add the meeting rooms
-    if (selectedBuilding.meetingRooms) {
-        selectedBuilding.meetingRooms.forEach(function (entry) {
-            markers.push(entry);
+    if (floorId > 0 && selectedBuilding.floors) {
+        selectedBuilding.floors.forEach(function (floor) {
+            if (floor.id == floorId && floor.meetingRooms) {
+                floor.meetingRooms.forEach(function (entry) {
+                    //console.log(entry.id);
+                    markers.push(entry);
+                });
+            }
         });
     }
-    if (myLocation) {
-        myLocation.name = 'Me';
-        myLocation.description = 'I am currently here.';
-        markers.push(myLocation)
-    }
+    //if (myLocation) {
+    //    myLocation.name = 'Me';
+    //    myLocation.description = 'I am currently here.';
+    //    markers.push(myLocation)
+    //}
     $scope.onMarkerClicked = function (model) {
         var marker = model.model;
         $scope.selectedMarker = marker;

@@ -12,15 +12,12 @@
 
     <ion-content id="content" push-search>
         <div id="searchResults" class="clearfix">
-            <div class="list card" ng-repeat="result in searchResults">
+            <div class="list card" ng-repeat="result in searchResults track by result.id">
                 <div class="item item-text-wrap">
-                    <a class="item item-icon-left" href="#/app/mapselect/{{result.id}}">
+                    <a class="item item-icon-left" href="#/app/mapselect/{{result.id}}&{{result.floorId}}">
                         <i class="icon {{result.icon}}"></i>
-
                         <h2><strong>{{result.name}}</strong></h2>
-
                         <div ng-bind-html="result.description"></div>
-
                     </a>
                 </div>
             </div>

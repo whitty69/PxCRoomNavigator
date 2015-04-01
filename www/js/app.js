@@ -57,7 +57,7 @@ angular.module('starter', [
                 }
             })
             .state('app.mapselect', {
-                url: '/mapselect/:buildingId',
+                url: '/mapselect/:buildingId&:floorId',
                 views: {
                     'menuContent': {
                         templateUrl: 'templates/map.html',
