@@ -45617,7 +45617,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
  *         url: "/tab",
  *         abstract: true,
  *         prefetchTemplate: false,
- *         templateUrl: "tabs-templates/about.html"
+ *         templateUrl: "tabs-templates/settings.html"
  *       })
  *       .state('tabs.home', {
  *         url: "/home",

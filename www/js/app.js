@@ -5,14 +5,15 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', [
+var starter = angular.module('starter', [
     'ionic',
+    'pascalprecht.translate',
     'starter.controllers',
     'starter.services',
-    'uiGmapgoogle-maps',
+    'uiGmapgoogle-maps'
 ])
 
-    .run(function ($ionicPlatform) {
+    .run(function ($ionicPlatform, $translate, $log) {
         $ionicPlatform.ready(function () {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
             // for form inputs)
@@ -23,14 +24,57 @@ angular.module('starter', [
                 // org.apache.cordova.statusbar required
                 StatusBar.styleDefault();
             }
-
-
+            var translate = $translate('app_name');
+            //console.log('ready ->' + translate.value);
+            $log.debug(translate);
+            if (typeof navigator.globalization !== "undefined") {
+                navigator.globalization.getPreferredLanguage(function (language) {
+                    $translate.use((language.value).split("-")[0]).then(function (data) {
+                        $log.debug("SUCCESS -> " + data);
+                    }, function (error) {
+                        $log.debug("ERROR -> " + error);
+                    });
+                }, null);
+            }
         });
     })
 
 
-    .config(function ($stateProvider, $urlRouterProvider, uiGmapGoogleMapApiProvider) {
+    .config(function ($stateProvider, $urlRouterProvider, $translateProvider, uiGmapGoogleMapApiProvider) {
 
+        $translateProvider.translations('de', {
+            app_name: 'Quick Room Finder',
+            search_placeholder: 'Suchen',
+            search_clear: 'Abbrechen',
+            menu_map: 'Karte',
+            menu_buildings: 'Gebaüde',
+            menu_search: 'Suche',
+            menu_settings: 'Einstellungen',
+            menu_about: 'Information',
+            menu_menuplan: 'Speiseplan',
+            menu_choose_language: 'Sprache wählen',
+            menu_language_de: 'Deutsch',
+            menu_language_en: 'Englisch',
+            map_distance: 'Entfernung'
+        });
+        $translateProvider.translations('en', {
+            app_name: "Quick Room Finder",
+            search_placeholder: 'Search',
+            search_clear: 'Cancel',
+            menu_map: 'Map',
+            menu_buildings: 'Buildings',
+            menu_search: 'Search',
+            menu_settings: 'Settings',
+            menu_about: 'About',
+            menu_menuplan: 'Menu Plan',
+            menu_choose_language: 'Choose Language',
+            menu_language_de: 'German',
+            menu_language_en: 'English',
+            menu_about_text: 'This app is to be used in accordance with the rules of the road. The author is not be liable for any damage caused to person or property when using this app!',
+            map_distance: 'Current Distance'
+        });
+        $translateProvider.determinePreferredLanguage();
+        $translateProvider.fallbackLanguage("en");
         // Ionic uses AngularUI Router which uses the concept of states
         // Learn more here: https://github.com/angular-ui/ui-router
         // Set up the various states which the app can be in.
@@ -92,12 +136,12 @@ angular.module('starter', [
                     }
                 }
             })
-            .state('app.about', {
-                url: '/about',
+            .state('app.settings', {
+                url: '/settings',
                 views: {
                     'menuContent': {
-                        templateUrl: 'templates/about.html',
-                        controller: 'AppController'
+                        templateUrl: 'templates/settings.html',
+                        controller: 'SettingsController'
                     }
                 }
             })
@@ -107,12 +151,11 @@ angular.module('starter', [
 
         // if none of the above states are matched, use this as the fallback
         $urlRouterProvider.otherwise('/app/map');
-
         uiGmapGoogleMapApiProvider.configure({
             key: 'AIzaSyCPJNT0sUAJo2vcYrjzexh9S7PzrqwSbFA',
             v: '3.17',
             libraries: 'weather,geometry,visualization,animation'
-        });
-
+        })
     });
+
 
