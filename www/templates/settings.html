@@ -1,0 +1,30 @@
+<ion-view view-title="{{'app_name' | translate}} - {{'menu_settings' | translate}}">
+    <ion-content>
+
+        <div class="list card">
+            <ion-radio ng-repeat="language in languages"
+                       ng-value="language.value"
+                       ng-change="changeLang(language.value)"
+                       ng-model="data.language">
+                {{language.text | translate}}
+            </ion-radio>
+            <!--<label class="item item-radio">-->
+            <!--<input type="radio" name="group" ng-click="changeLang(language.value)">-->
+            <!--<div class="item-content">-->
+            <!--{{language.text | translate}}-->
+            <!--</div>-->
+            <!--<i class="radio-icon ion-checkmark"></i>-->
+            <!--</label>-->
+        </div>
+
+        <div class="card">
+            <div class="item item-text-wrap">
+                <h2>{{'menu_about' | translate}}</h2>
+
+                <p>{{'menu_about_text' | translate}}</p>
+
+                <p>(c) P. Whitmore 2015</p>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

@@ -1,11 +1,14 @@
-<ion-view view-title="Quick Room Finder - Search">
+<ion-view view-title="{{'app_name' | translate}} - {{'menu_search' | translate}}">
     <div id="search_area" ng-class="ng-scope">
         <div id="search-bar">
             <div class="item item-input-inset">
                 <label class="item-input-wrapper" id="search-input">
                     <i class="icon ion-search placeholder-icon"></i>
-                    <input type="text" placeholder="Search" ng-model="query" ng-change="search()">
+                    <input type="text" placeholder="{{'search_placeholder' | translate}}" ng-model="query"
+                           ng-change="search()">
                 </label>
+                <button type="button" class="button button-clear" ng-click="cancel()">{{'search_clear' | translate}}
+                </button>
             </div>
         </div>
     </div>

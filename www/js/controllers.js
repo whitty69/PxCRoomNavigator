@@ -1,6 +1,7 @@
 angular.module('starter.controllers', [])
 
-    .controller('MapController', function ($scope, uiGmapGoogleMapApi, Buildings, $interval, $cordovaGeolocation, $timeout) {
+
+    .controller('MapController', function ($scope, uiGmapGoogleMapApi, Buildings, $interval, $cordovaGeolocation, $timeout, $translate, $log) {
 
         // Do stuff with your $scope.
         // Note: Some of the directives require at least something to be defined originally!
@@ -15,7 +16,12 @@ angular.module('starter.controllers', [])
             $scope.markers = prepMarkers($scope, Buildings.getSelectedBuilding(), -1, $timeout, -1);
         });
 
-
+        $translate(['app_name'])
+            .then(function (translation) {
+                $log.debug(translation.app_name);
+            });
+        // translate instantly from the internal state of loaded translation
+        $log.debug($translate.instant('app_name'));
     })
     .controller('MapSelectController', function ($scope, uiGmapGoogleMapApi, Buildings, $stateParams, $ionicLoading, $cordovaGeolocation, $timeout) {
         //console.log($stateParams.floorId);
@@ -88,6 +94,13 @@ angular.module('starter.controllers', [])
 
         $scope.search = function () {
             doSearch($scope.query);
+        };
+        ;
+
+        $scope.cancel = function () {
+            console.log('cancel');
+            $scope.query = '';
+            $scope.searchResults = [];
         }
     })
 
@@ -112,6 +125,34 @@ angular.module('starter.controllers', [])
                 price: '€0.50/100g'
             }
         ];
+    })
+
+    .controller('SettingsController', function ($scope, $translate, $log) {
+
+        $scope.languages = [
+            {
+                text: 'menu_language_de',
+                icon: '/img/german_flag.jpg',
+                value: 'de'
+            },
+            {
+                text: 'menu_language_en',
+                icon: '/img/english_flag.jpg',
+                value: 'en'
+            }];
+
+        $scope.data = {language: $translate.use().split('_')[0]};
+
+        $log.debug('Current Language = ' + $scope.data.language);
+
+        $scope.changeLang = function (key) {
+            $translate.use(key).then(function (key) {
+                $log.debug('Language changed to ' + key);
+                //$scope.$apply();
+            }, function (key) {
+                $log.error("error occurred");
+            });
+        };
     });
 function setMyLocation($scope, Buildings, $cordovaGeolocation, $timeout) {
     var options = {

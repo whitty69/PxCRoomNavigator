@@ -17,7 +17,7 @@ ionicApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $io
         .state('tab', {
             url: "/tab",
             abstract: true,
-            templateUrl: "templates/about.html"
+            templateUrl: "templates/settings.html"
         })
 
         .state('tab.alerts', {

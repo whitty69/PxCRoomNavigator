@@ -1,4 +1,4 @@
-<ion-view view-title="Quick Room Finder">
+<ion-view view-title="{{'app_name' | translate}} - {{'menu_map' | translate}}">
     <div id="map_canvas" ng-class="ng-scope">
         <ui-gmap-google-map id="map"
                             center="map.center"
@@ -41,7 +41,7 @@
         </ui-gmap-google-map>
     </div>
     <ion-footer-bar class="bar-dark">
-        <P><span class="button-bar-inline icon ion-navigate"> distance to building {{ currentLocation.distance | number:3 }}km</span>
+        <P><span class="button-bar-inline icon ion-navigate"> {{'map_distance' | translate}} {{ currentLocation.distance | number:3 }}km</span>
         </P>
     </ion-footer-bar>
 </ion-view>
