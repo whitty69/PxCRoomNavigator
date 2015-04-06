@@ -1,5 +1,4 @@
 // Ionic Starter App
-
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
@@ -10,7 +9,7 @@ var starter = angular.module('starter', [
     'pascalprecht.translate',
     'starter.controllers',
     'starter.services',
-    'uiGmapgoogle-maps'
+    'uiGmapgoogle-maps',
 ])
 
     .run(function ($ionicPlatform, $translate, $log) {
@@ -37,6 +36,25 @@ var starter = angular.module('starter', [
                 }, null);
             }
         });
+        /*$http.get('data/initial_data_import.json').success (function(data){
+         $log.debug(data);
+         });
+         */
+        /*var centerPoint = localStorage.getItem("centerPoint");
+         var buildings  = localStorage.getItem("buildings");
+         $log.debug(centerPoint);
+         $log.debug(buildings);
+
+         if(!centerPoint) {
+         localStorage.setItem("centerPoint", JSON.stringify(Buildings.getCampusCenter()));
+         }else{
+
+         }
+
+         if(!buildings){
+         localStorage.setItem("buildings", JSON.stringify(Buildings.all()));
+         }
+         */
     })
 
 
@@ -55,7 +73,7 @@ var starter = angular.module('starter', [
             menu_choose_language: 'Sprache wählen',
             menu_language_de: 'Deutsch',
             menu_language_en: 'Englisch',
-            map_distance: 'Entfernung'
+            map_distance: 'Entfernung zur Gebäude:'
         });
         $translateProvider.translations('en', {
             app_name: "Quick Room Finder",
@@ -71,7 +89,7 @@ var starter = angular.module('starter', [
             menu_language_de: 'German',
             menu_language_en: 'English',
             menu_about_text: 'This app is to be used in accordance with the rules of the road. The author is not be liable for any damage caused to person or property when using this app!',
-            map_distance: 'Current Distance'
+            map_distance: 'Current Distance to building:'
         });
         $translateProvider.determinePreferredLanguage();
         $translateProvider.fallbackLanguage("en");
@@ -151,6 +169,8 @@ var starter = angular.module('starter', [
 
         // if none of the above states are matched, use this as the fallback
         $urlRouterProvider.otherwise('/app/map');
+
+        // setup the google maps config
         uiGmapGoogleMapApiProvider.configure({
             key: 'AIzaSyCPJNT0sUAJo2vcYrjzexh9S7PzrqwSbFA',
             v: '3.17',
