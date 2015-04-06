@@ -1,6 +1,76 @@
 angular.module('starter.services', [])
 
-    .factory('Buildings', function ($q, $timeout, $http) {
+    .factory('Buildings', function ($log) {
+
+
+        /*persistence.store.cordovasql.config(persistence, 'app_db', '0.0.1', 'Database description', 5 * 1024 * 1024, 0);
+
+         var entities = {};
+
+         entities.Building = persistence.define('Building', {
+         id: 'NUMBER',
+         name: 'TEXT',
+         description: 'TEXT',
+         img: 'img/factory.png',
+         icon: 'ion-home',
+         coords: {
+         latitude: 51.934863,
+         longitude: 9.104763
+         },
+         floors: [
+         {
+         id: 211,
+         name: '1st Floor',
+         meetingRooms: [{
+         id: 21101,
+         name: 'G21 Room 101',
+         description: 'A meeting room for up to 15 people. The room has a projector and audio capabilities',
+         img: 'img/regroup.png',
+         icon: 'ion-ios-people',
+         floor: '1st',
+         coords: {
+         latitude: 51.93478,
+         longitude: 9.10470
+         }
+         },
+         {
+         id: 21102,
+         name: 'G21 Room 102',
+         description: 'A meeting room for up to 8 people. The room has a projector and audio capabilities',
+         img: 'img/regroup.png',
+         icon: 'ion-ios-people',
+         floor: '1st',
+         coords: {
+         latitude: 51.934843,
+         longitude: 9.104663
+         }
+         }]
+         }]
+
+         });
+
+         persistence.debug = true;
+         persistence.schemaSync();
+
+         /* return {
+         Entities: entities,
+
+         add: function(playlist) {
+         persistence.add(playlist);
+         persistence.flush();
+         },
+
+         getAllPlaylists: function() {
+         var defer = $q.defer();
+
+         entities.Playlist.all().list(null, function (playlists) {
+         defer.resolve(playlists);
+         });
+
+         return defer.promise;
+         }
+         };*/
+
         // Might use a resource here that returns a JSON array
         // Some fake testing data
         var campusCenter = {
@@ -163,9 +233,14 @@ angular.module('starter.services', [])
         }];
 
         var selectedBuilding = buildings[0];
+
+
         return {
             all: function () {
                 return buildings;
+            },
+            set: function (pBuildings) {
+                buildings = pBuildings;
             },
             get: function (buildingId) {
                 var res = null;
@@ -195,8 +270,9 @@ angular.module('starter.services', [])
             },
             search: function (query) {
                 var results = [];
+                var pBuildings = this.all();
                 if (query) {
-                    buildings.forEach(function (building) {
+                    pBuildings.forEach(function (building) {
 
                         var re = new RegExp(query, 'gi');
                         if (building.name.search(re) > -1 || building.description.search(re) > -1) {
@@ -218,7 +294,7 @@ angular.module('starter.services', [])
                     });
                 } else {
                     results = buildings;
-                    buildings.forEach(function (building) {
+                    pBuildings.forEach(function (building) {
                         if (building.floors) {
                             building.floors.forEach(function (floor) {
                                 if (floor.meetingRooms) {
@@ -314,3 +390,4 @@ function calculateDistance(starting, ending) {
         return -1;
     }
 }
+

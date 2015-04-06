@@ -1,33 +1,34 @@
 angular.module('starter.controllers', [])
 
 
-    .controller('MapController', function ($scope, uiGmapGoogleMapApi, Buildings, $interval, $cordovaGeolocation, $timeout, $translate, $log) {
+    .controller('MapController', function ($scope, uiGmapGoogleMapApi, Buildings, $interval, $cordovaGeolocation, $timeout, $log) {
 
         // Do stuff with your $scope.
         // Note: Some of the directives require at least something to be defined originally!
         // e.g. $scope.markers = []
         // The "then" callback function provides the google.maps object.
+        // get the lookup for position running
         $interval(function () {
             setMyLocation($scope, Buildings, $cordovaGeolocation, $timeout);
         }, 10000);
         uiGmapGoogleMapApi.then(function (maps) {
-            prepareMapEvents($scope, Buildings, $cordovaGeolocation, $timeout);
+            prepareMapEvents($scope, Buildings, $cordovaGeolocation, $timeout, $log);
             $scope.meMarkers = [Buildings.getMyLocation()];
             $scope.markers = prepMarkers($scope, Buildings.getSelectedBuilding(), -1, $timeout, -1);
         });
-
+        /*
         $translate(['app_name'])
             .then(function (translation) {
                 $log.debug(translation.app_name);
             });
         // translate instantly from the internal state of loaded translation
-        $log.debug($translate.instant('app_name'));
+         $log.debug($translate.instant('app_name'));*/
     })
-    .controller('MapSelectController', function ($scope, uiGmapGoogleMapApi, Buildings, $stateParams, $ionicLoading, $cordovaGeolocation, $timeout) {
+    .controller('MapSelectController', function ($scope, uiGmapGoogleMapApi, Buildings, $stateParams, $ionicLoading, $cordovaGeolocation, $timeout, $log) {
         //console.log($stateParams.floorId);
         //console.log($stateParams.buildingId);
 
-        prepareMapEvents($scope, Buildings, $cordovaGeolocation);
+        prepareMapEvents($scope, Buildings, $cordovaGeolocation, $timeout, $log);
         uiGmapGoogleMapApi.then(function (maps) {
             try {
                 var buildingId = parseInt($stateParams.buildingId);
@@ -84,18 +85,16 @@ angular.module('starter.controllers', [])
 
     })
 
-    .controller('SearchController', function ($scope, Buildings) {
+    .controller('SearchController', function ($scope, Buildings, $log) {
         var doSearch = ionic.debounce(function (query) {
-            var results = [];
-
             $scope.searchResults = Buildings.search(query);
+            $log.debug("searching for " + query);
             $scope.$apply();
         }, 500);
 
         $scope.search = function () {
             doSearch($scope.query);
         };
-        ;
 
         $scope.cancel = function () {
             console.log('cancel');
@@ -155,6 +154,7 @@ angular.module('starter.controllers', [])
         };
     });
 function setMyLocation($scope, Buildings, $cordovaGeolocation, $timeout) {
+
     var options = {
         enableHighAccuracy: true,
         timeout: 5000,
@@ -174,9 +174,10 @@ function setMyLocation($scope, Buildings, $cordovaGeolocation, $timeout) {
     }, function (err) {
         console.error(err);
     });
+
 }
 
-function prepareMapEvents($scope, Buildings, $cordovaGeolocation, $timeout) {
+function prepareMapEvents($scope, Buildings, $cordovaGeolocation, $timeout, $log) {
     if (!$scope.map) {
         $scope.map = Buildings.getCampusCenter();
         setMyLocation($scope, Buildings, $cordovaGeolocation, $timeout);
@@ -191,6 +192,7 @@ function prepareMapEvents($scope, Buildings, $cordovaGeolocation, $timeout) {
                 coordinates: []
             }
         };
+
         $scope.map.events = {
             tilesloaded: function (map, eventName, originalEventArgs) {
             }
@@ -208,57 +210,56 @@ function prepareMapEvents($scope, Buildings, $cordovaGeolocation, $timeout) {
                         coordinates: [e.latLng.lng(), e.latLng.lat()]
                     }
                 };
-                //scope apply required because this event handler is outside of the angular domain
+                //scope apply required because this
+                // event handler is outside of the angular domain
+                $log.debug($scope.map.clickedMarker.title);
                 $scope.$apply();
             }
         };
+
     }
 }
 
 
 function prepMarkers($scope, selectedBuilding, selectedId, $timeout, floorId) {
 
-    //console.log("prepare markers - in")
     var markers = [];
 
     if (selectedBuilding) {
-        markers.push(selectedBuilding)
+        markers.push(selectedBuilding);
+        // add the meeting rooms
+        if (floorId > 0 && selectedBuilding.floors) {
+            selectedBuilding.floors.forEach(function (floor) {
+                if (floor.id == floorId && floor.meetingRooms) {
+                    floor.meetingRooms.forEach(function (entry) {
+                        //console.log(entry.id);
+                        markers.push(entry);
+                    });
+                }
+            });
+        }
     }
-    // add the meeting rooms
-    if (floorId > 0 && selectedBuilding.floors) {
-        selectedBuilding.floors.forEach(function (floor) {
-            if (floor.id == floorId && floor.meetingRooms) {
-                floor.meetingRooms.forEach(function (entry) {
-                    //console.log(entry.id);
-                    markers.push(entry);
-                });
-            }
-        });
-    }
-    //if (myLocation) {
-    //    myLocation.name = 'Me';
-    //    myLocation.description = 'I am currently here.';
-    //    markers.push(myLocation)
-    //}
+
     $scope.onMarkerClicked = function (model) {
         var marker = model.model;
         $scope.selectedMarker = marker;
         model.showWindow = null;
         $scope.$apply();
-
     };
     // set the onClicked listener
     markers.forEach(function (marker) {
+        // add a markerclicked event
         marker.onMarkerClicked = function () {
             $scope.onMarkerClicked(marker);
         };
 
         marker.closeClick = function () {
-            marker.showWindow = null;
+            marker.showWindow = false;
         };
 
         marker.options = {animation: google.maps.Animation.NONE};
-        if (marker.showWindow) {
+
+        if (marker.showWindow === true) {
             marker.showWindow = false;
         }
         if (marker.id === selectedId) {
@@ -271,5 +272,6 @@ function prepMarkers($scope, selectedBuilding, selectedId, $timeout, floorId) {
             }, 400);
         }
     });
+
     return markers;
 }

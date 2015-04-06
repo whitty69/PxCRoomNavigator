@@ -22,7 +22,7 @@ html, body, #map_canvas {
     background: none;
     position: absolute;
     width: 100%;
-    top: 45px;
+    top: 50px;
     height: 40px;
     z-index: 3;
 }
