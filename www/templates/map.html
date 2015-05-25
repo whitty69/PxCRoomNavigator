@@ -8,9 +8,13 @@
                             refresh="map.refresh"
                             options="map.options"
                             events="map.events"
-                            bounds="map.bounds">
+                            bounds="map.bounds"
+                            control="map.control">
 
-            <ui-gmap-markers models="markers" coords="'coords'" icon="'img'" title="'description'" labelAnchor="22 0"
+            <ui-gmap-markers models="markers" coords="'coords'"
+                             icon="'img'"
+                             title="'description'"
+                             labelAnchor="22 0"
                              labelClass="marker-labels"
                              click="onMarkerClicked" options="'options'">
                 <ui-gmap-windows show="'showWindow'" closeClick="'closeClick'">

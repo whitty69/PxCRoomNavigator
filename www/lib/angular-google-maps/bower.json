@@ -1,12 +1,12 @@
 {
   "name": "angular-google-maps",
-  "version": "2.0.17",
+  "version": "2.1.1",
   "main": "./dist/angular-google-maps.js",
   "dependencies": {
     "angular": ">=1.2.0",
     "lodash": "~2.4.1"
   },
-  "ignore": [
+  "ignore":[
     "*.json",
     ".gitignore",
     "travis.yml",

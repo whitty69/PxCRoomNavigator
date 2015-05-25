@@ -23,9 +23,10 @@ module.exports = (grunt) ->
     'grunt-debug-task'
     'grunt-curl'
     'grunt-verbosity'
+    'grunt-release'
     'grunt-webpack'
-  ].forEach (gruntLib) ->
-    grunt.loadNpmTasks gruntLib
+    ].forEach (gruntLib) ->
+      grunt.loadNpmTasks gruntLib
 
   #squishing this file done by moving grunt options out to its own file. This way we can focus on tasks!
   options = require('./grunt/options')(grunt)
@@ -40,6 +41,8 @@ module.exports = (grunt) ->
     allExamplesOpen[root] =
       path: pathValue
 
+#  console.log allExamplesOpen, true
+
   showOpenType = (toIterate = allExamplesOpen) ->
     _(toIterate).each (v, k) ->
       log "#{k} -> #{v.path}"
@@ -51,8 +54,8 @@ module.exports = (grunt) ->
   grunt.registerTask "default", [
     'bower', 'curl',
     'verbosity', 'clean:dist', 'jshint', 'mkdir', 'coffee',
-    'concat:libs', 'replace', 'webpack', 'concat:dist',
-    'copy', 'uglify::dist', 'jasmine:consoleSpec']
+    'concat:libs', 'replace', 'webpack', 'concat:dist', 'concat:streetview'
+    'copy', 'uglify:dist', 'uglify:streetview', 'jasmine:consoleSpec']
 
   # run default "grunt" prior to generate _SpecRunner.html
   grunt.registerTask "spec", [
@@ -73,7 +76,7 @@ module.exports = (grunt) ->
 
   dev = ["clean:dist", "jshint", "mkdir", "coffee", "concat:libs", "replace", "webpack", "concat", "copy"]
 
-  grunt.registerTask "dev", dev.concat ["uglify:distMapped", "jasmine:spec"]
+  grunt.registerTask "dev", dev.concat ["uglify:distMapped", "uglify:streetviewMapped", "jasmine:spec"]
 
   grunt.registerTask "fast", dev.concat ["jasmine:spec"]
 
@@ -81,6 +84,11 @@ module.exports = (grunt) ->
     'bower', 'curl',
     "clean:dist", "jshint", "mkdir", "coffee", "concat:libs", "replace", "webpack", "concat", "uglify"
     "copy", "jasmine:spec"]
+
+  grunt.registerTask "build-street-view", ['clean:streetview','mkdir','coffee', 'concat:libs', 'replace',
+    'concat:streetview', 'concat:streetviewMapped', 'uglify:streetview', 'uglify:streetviewMapped']
+
+  grunt.registerTask "buildAll", "mappAll"
 
   # Run the example page by creating a local copy of angular-google-maps.js
   # and running a webserver on port 3100 with livereload. Web page is opened
@@ -93,9 +101,11 @@ module.exports = (grunt) ->
   grunt.registerTask 'bump-@-major', ['bump-only:major', 'mappAll', 'bump-commit']
 
   exampleOpenTasks = []
-  _(allExamplesOpen).each (v, key) ->
+
+  _.each allExamplesOpen, (v, key) ->
     basicTask = "open:" + key
     #register individual task (runs by itself)
+
     grunt.registerTask key, ["fast", "clean:example", "connect:server", basicTask, "watch:all"]
     exampleOpenTasks.push basicTask
 

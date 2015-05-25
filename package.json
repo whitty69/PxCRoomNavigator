@@ -16,5 +16,11 @@
   },
   "cordovaPlugins": [
     "org.apache.cordova.inappbrowser"
+  ],
+  "cordovaPlatforms": [
+    {
+      "platform": "android",
+      "locator": "browser"
+    }
   ]
 }

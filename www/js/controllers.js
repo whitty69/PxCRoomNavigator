@@ -1,7 +1,16 @@
+function setOverlay(map, $scope, $log) {
+    var swBound = new google.maps.LatLng(51.927429, 9.100171); // south west
+    var neBound = new google.maps.LatLng(51.938204, 9.112544); // north east
+    var bounds = new google.maps.LatLngBounds(swBound, neBound);
+    var srcImage = 'img/overlay_img.png';
+    $log.debug(map);
+    $scope.overlay = new USGSOverlay(bounds, srcImage, map);
+
+}
 angular.module('starter.controllers', [])
 
 
-    .controller('MapController', function ($scope, uiGmapGoogleMapApi, Buildings, $interval, $cordovaGeolocation, $timeout, $log) {
+    .controller('MapController', function ($scope, uiGmapIsReady, uiGmapGoogleMapApi, Buildings, $interval, $cordovaGeolocation, $timeout, $log) {
 
         // Do stuff with your $scope.
         // Note: Some of the directives require at least something to be defined originally!
@@ -15,16 +24,15 @@ angular.module('starter.controllers', [])
             prepareMapEvents($scope, Buildings, $cordovaGeolocation, $timeout, $log);
             $scope.meMarkers = [Buildings.getMyLocation()];
             $scope.markers = prepMarkers($scope, Buildings.getSelectedBuilding(), -1, $timeout, -1);
+            return maps;
         });
-        /*
-        $translate(['app_name'])
-            .then(function (translation) {
-                $log.debug(translation.app_name);
+        uiGmapIsReady.promise()                     // this gets all (ready) map instances - defaults to 1 for the first map
+            .then(function(instances) {                 // instances is an array object
+               // $scope.map.control = instances[0].map;
+                setOverlay(instances[0].map, $scope, $log);
             });
-        // translate instantly from the internal state of loaded translation
-         $log.debug($translate.instant('app_name'));*/
     })
-    .controller('MapSelectController', function ($scope, uiGmapGoogleMapApi, Buildings, $stateParams, $ionicLoading, $cordovaGeolocation, $timeout, $log) {
+    .controller('MapSelectController', function ($scope, uiGmapGoogleMapApi, uiGmapIsReady, Buildings, $stateParams, $ionicLoading, $cordovaGeolocation, $timeout, $log) {
         //console.log($stateParams.floorId);
         //console.log($stateParams.buildingId);
 
@@ -40,7 +48,13 @@ angular.module('starter.controllers', [])
             } finally {
                 $ionicLoading.hide();
             }
+            return maps;
         });
+        uiGmapIsReady.promise()                     // this gets all (ready) map instances - defaults to 1 for the first map
+            .then(function(instances) {                 // instances is an array object
+                setOverlay(instances[0].map, $scope, $log);
+            });
+
     })
 
     .controller('AppController', function ($scope, $ionicLoading, uiGmapGoogleMapApi, Buildings, $timeout) {
@@ -275,3 +289,118 @@ function prepMarkers($scope, selectedBuilding, selectedId, $timeout, floorId) {
 
     return markers;
 }
+
+
+// Initialize the map and the custom overlay.
+
+USGSOverlay.prototype = new google.maps.OverlayView();
+/** @constructor */
+function USGSOverlay(bounds, image, map) {
+
+    // Initialize all properties.
+    this.bounds_ = bounds;
+    this.image_ = image;
+    this.map_ = map;
+
+    // Define a property to hold the image's div. We'll
+    // actually create this div upon receipt of the onAdd()
+    // method so we'll leave it null for now.
+    this.div_ = null;
+
+    // Explicitly call setMap on this overlay.
+    this.setMap(map);
+}
+
+/**
+ * onAdd is called when the map's panes are ready and the overlay has been
+ * added to the map.
+ */
+USGSOverlay.prototype.onAdd = function() {
+
+    var div = document.createElement('div');
+    div.style.borderStyle = 'none';
+    div.style.borderWidth = '0px';
+    div.style.position = 'absolute';
+
+    // Create the img element and attach it to the div.
+    var img = document.createElement('img');
+    var r = 'rotate(-10deg)';
+    img.src = this.image_;
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.position = 'absolute';
+    img.style.opacity = '0.7';
+    img.style.transform = r;
+    div.appendChild(img);
+
+    this.div_ = div;
+
+    // Add the element to the "overlayLayer" pane.
+    var panes = this.getPanes();
+    panes.overlayLayer.appendChild(div);
+};
+
+USGSOverlay.prototype.draw = function() {
+
+    // We use the south-west and north-east
+    // coordinates of the overlay to peg it to the correct position and size.
+    // To do this, we need to retrieve the projection from the overlay.
+    var overlayProjection = this.getProjection();
+
+    // Retrieve the south-west and north-east coordinates of this overlay
+    // in LatLngs and convert them to pixel coordinates.
+    // We'll use these coordinates to resize the div.
+    var sw = overlayProjection.fromLatLngToDivPixel(this.bounds_.getSouthWest());
+    var ne = overlayProjection.fromLatLngToDivPixel(this.bounds_.getNorthEast());
+
+    // Resize the image's div to fit the indicated dimensions.
+    var div = this.div_;
+    div.style.left = sw.x + 'px';
+    div.style.top = ne.y + 'px';
+    div.style.width = (ne.x - sw.x) + 'px';
+    div.style.height = (sw.y - ne.y) + 'px';
+};
+
+// The onRemove() method will be called automatically from the API if
+// we ever set the overlay's map property to 'null'.
+USGSOverlay.prototype.onRemove = function() {
+    this.div_.parentNode.removeChild(this.div_);
+    this.div_ = null;
+};
+
+// [START region_hideshow]
+// Set the visibility to 'hidden' or 'visible'.
+USGSOverlay.prototype.hide = function() {
+    if (this.div_) {
+        // The visibility property must be a string enclosed in quotes.
+        this.div_.style.visibility = 'hidden';
+    }
+};
+
+USGSOverlay.prototype.show = function() {
+    if (this.div_) {
+        this.div_.style.visibility = 'visible';
+    }
+};
+
+USGSOverlay.prototype.toggle = function() {
+    if (this.div_) {
+        if (this.div_.style.visibility == 'hidden') {
+            this.show();
+        } else {
+            this.hide();
+        }
+    }
+};
+
+// Detach the map from the DOM via toggleDOM().
+// Note that if we later reattach the map, it will be visible again,
+// because the containing <div> is recreated in the overlay's onAdd() method.
+USGSOverlay.prototype.toggleDOM = function() {
+    if (this.getMap()) {
+        // Note: setMap(null) calls OverlayView.onRemove()
+        this.setMap(null);
+    } else {
+        this.setMap(this.map_);
+    }
+};

@@ -1,5 +1,6 @@
 window["uiGmapInitiator"] =
   initDirective: (testSuite, apiSubjectClassName, thingsToInit = ['initAll'])->
+
     injects = ['uiGmapLogger']
     if apiSubjectClassName?
       injects.push 'uiGmap' + apiSubjectClassName
